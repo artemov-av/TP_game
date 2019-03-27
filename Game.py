@@ -75,6 +75,7 @@ class Game(metaclass=Singleton):
 	def __init__(self):
 		self.french_player_ = FrenchPlayer()
 		self.british_player_ = BritishPlayer()
+		self.active_player_ = self.british_player_
 		self.game_map_ = GameMap(10, 5)
 
 	def get_french_player(self):

@@ -48,10 +48,10 @@ class GameView(QGraphicsView):
 
 
 class MainGameWidget(QWidget):
-	def __init__(self, french_player, british_player):
+	def __init__(self):
 		super().__init__()
-		self.british_creating_panel_ = UnitCreatingPanel(british_player)
-		self.french_creating_panel_ = UnitCreatingPanel(french_player)
+		self.british_creating_panel_ = UnitCreatingPanel(Game().get_british_player())
+		self.french_creating_panel_ = UnitCreatingPanel(Game().get_french_player())
 		self.game_view_ = GameView()
 		layout = QHBoxLayout()
 		layout.addWidget(self.british_creating_panel_)
@@ -60,16 +60,16 @@ class MainGameWidget(QWidget):
 
 
 class GameWindow(QMainWindow):
-	def __init__(self, french_player, british_player):
+	def __init__(self):
 		super().__init__()
-		self._main_widget = MainGameWidget(french_player, british_player)
+		self._main_widget = MainGameWidget()
 		self._main_widget.setMinimumSize(700, 700)
 		self.setCentralWidget(self._main_widget)
-		self.setWindowTitle('rly stupid gama')
+		self.setWindowTitle('rly stupid game')
 		self.show()
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    w = GameWindow(Game().get_french_player(), Game().get_british_player())
+    w = GameWindow()
     sys.exit(app.exec_())
