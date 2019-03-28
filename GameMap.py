@@ -14,6 +14,9 @@ class GameMap:
 	def get_unit(self, x, y):
 		return self.unit_map_[x][y]
 
+	def can_unit_be_placed(self, x, y):
+		return self.is_there_tile(x, y) and self.unit_map_[x][y] is None
+
 	def is_there_tile(self, x, y):
 		return self.tile_map_[x][y] is not None
 

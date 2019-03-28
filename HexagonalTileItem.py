@@ -1,12 +1,12 @@
 from PyQt5.QtGui import QPolygonF, QColor, QPainterPath, QBrush
 from PyQt5.QtCore import QRectF, QPointF, QEvent
-from PyQt5.QtWidgets import QGraphicsItem
+from PyQt5.QtWidgets import QGraphicsObject
 from PyQt5 import QtCore
 
 import math
 
 
-class HexagonalTileItem(QGraphicsItem):
+class HexagonalTileItem(QGraphicsObject):
 	def __init__(self, radius, x, y):
 		super().__init__()
 		self.radius_ = radius
