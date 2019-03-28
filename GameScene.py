@@ -1,8 +1,9 @@
 from PyQt5.QtWidgets import QGraphicsScene
 from PyQt5 import QtCore
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QPointF
 
 from HexagonalTileItem import *
+from UnitItem import UnitItem
 from Game import Game, UnitType
 
 
@@ -12,29 +13,33 @@ class GameScene(QGraphicsScene):
 	def __init__(self):
 		super().__init__()
 		self.tile_radius_ = 30;
+		self.margin_x_ = 40
+		self.margin_y_ = 40
+		self.unit_size_ = 32
 
 	def add_map_tiles(self):
-		game_map = Game().get_game_map()
-		margin_x = 40
-		margin_y = 40
+		game_map = Game().get_game_map()		
 		for y in range(game_map.get_height()):
 			for x in range(game_map.get_width()):
 				if game_map.is_there_tile(y, x):
 					tile = HexagonalTileItem(self.tile_radius_, y, x)
-					tile.setPos(margin_x + self.tile_radius_*math.sin(math.pi/3)*(2*x+2-y%2), margin_y + self.tile_radius_*3/2*(y+1))
+					tile.setPos(self.translate_coords(x, y))
 					self.addItem(tile)
 					tile.installEventFilter(self)
 
+	def translate_coords(self, x, y):
+		return QPointF(self.margin_x_ + self.tile_radius_*math.sin(math.pi/3)*(2*x+2-y%2), self.margin_y_ + self.tile_radius_*3/2*(y+1))
+
 	def eventFilter(self, object, event):
 		if event.type() == QEvent.GraphicsSceneMousePress:
-			# print(object.x_, object.y_)
 			self.tile_clicked.emit(object.x_, object.y_)
 		return True
 
-	def add_unit_item(self, unit_type, x, y):
-		if unit_type == UnitType.SWORDSMAN:
-			print("added swordsman")
-		elif unit_type == UnitType.ARCHER:
-			print("added archer")
-		elif unit_type == UnitType.CAVALRY:
-			print("added cavalry")
+	def add_unit_item(self, unit, x, y):
+		y, x = x, y
+		unit_item = UnitItem(unit)
+		translated_coords = self.translate_coords(x, y)
+		translated_coords.setX(translated_coords.x() - self.unit_size_/2)
+		translated_coords.setY(translated_coords.y() - self.unit_size_/2)
+		unit_item.setPos(translated_coords)
+		self.addItem(unit_item)

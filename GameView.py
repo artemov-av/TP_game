@@ -95,33 +95,3 @@ class UnitCreatingPanel(QWidget):
 		self.swordsman_radio_.clicked.connect(lambda f: signal.emit(UnitType.SWORDSMAN))
 		self.archer_radio_.clicked.connect(lambda f: signal.emit(UnitType.ARCHER))
 		self.cavalry_radio_.clicked.connect(lambda f: signal.emit(UnitType.CAVALRY))
-
-# class GameView(QGraphicsView):
-# 	def __init__(self):
-# 		super().__init__()
-# 		self.setScene(Game().get_game_scene())
-# 		self.game_scene_.add_map_tiles()
-
-
-# class MainGameWidget(QWidget):
-# 	def __init__(self):
-# 		super().__init__()
-# 		self.british_creating_panel_ = UnitCreatingPanel(Game().get_british_player())
-# 		self.french_creating_panel_ = UnitCreatingPanel(Game().get_french_player())
-# 		self.game_view_ = GameView()
-# 		layout = QHBoxLayout()
-# 		layout.addWidget(self.british_creating_panel_)
-# 		layout.addWidget(self.game_view_)
-# 		self.setLayout(layout)
-
-
-# class GameWindow(QMainWindow):
-# 	unit_changed = pyqtSignal(UnitType)
-
-# 	def __init__(self):
-# 		super().__init__()
-# 		self._main_widget = MainGameWidget()
-# 		self._main_widget.setMinimumSize(700, 700)
-# 		self.setCentralWidget(self._main_widget)
-# 		self.setWindowTitle('rly stupid game')
-# 		self.show()

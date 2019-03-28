@@ -81,7 +81,7 @@ class BritishPlayer(Player):
 
 class Game(QObject):
 	turn_changed = pyqtSignal()
-	unit_added_in_map = pyqtSignal(UnitType, int, int)
+	unit_added_in_map = pyqtSignal(Unit, int, int)
 
 	instance_ = None
 	was_created_ = False
@@ -132,7 +132,7 @@ class Game(QObject):
 
 			if new_unit is not None:
 				self.game_map_.add_unit(new_unit, x, y)
-				self.unit_added_in_map.emit(unit_type, 0, 0)
+				self.unit_added_in_map.emit(new_unit, x, y)
 				self.end_turn()
 
 	def end_turn(self):
@@ -140,5 +140,4 @@ class Game(QObject):
 			self.active_player_ = self.french_player_
 		else:
 			self.active_player_ = self.british_player_
-		print(self.active_player_)
 		self.turn_changed.emit()
