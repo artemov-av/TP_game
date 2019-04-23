@@ -1,7 +1,7 @@
 from PyQt5.QtGui import QColor, QPainterPath, QBrush
 # from PyQt5.QtGui import QPolygonF, QColor, QPainterPath, QBrush
-from PyQt5.QtCore import QRectF, QPointF, QEvent
-# from PyQt5.QtCore import QRectF, QPointF
+from PyQt5.QtCore import QRectF, QPointF
+# from PyQt5.QtCore import QRectF, QPointF, QEvent
 from PyQt5.QtWidgets import QGraphicsObject
 # from PyQt5 import QtCore
 import math
