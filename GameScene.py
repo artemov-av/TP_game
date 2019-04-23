@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsScene
 # from PyQt5 import QtCore
-# from PyQt5.QtCore import pyqtSignal, QPointF
-from PyQt5.QtCore import pyqtSignal
+# from PyQt5.QtCore import pyqtSignal, QEvent, QPointF
+from PyQt5.QtCore import pyqtSignal, QEvent
 
 
 from HexagonalTileItem import *
