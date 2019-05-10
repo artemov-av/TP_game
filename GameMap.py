@@ -22,6 +22,10 @@ class GameMap:
 	def remove_unit(self, x, y):
 		self.unit_map_[x][y] = None
 
+	def move_unit(self, x1, y1, x2, y2):
+		self.unit_map_[x2][y2] = self.unit_map_[x1][y1]
+		self.unit_map_[x1][y1] = None
+
 	def get_width(self):
 		return len(self.tile_map_[0])
 

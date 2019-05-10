@@ -72,6 +72,8 @@ class BritishPlayer(Player):
 class Game(QObject):
 	turn_changed = pyqtSignal()
 	unit_added_in_map = pyqtSignal(Unit, int, int)
+	move_unit = pyqtSignal(int, int, int, int)
+	remove_unit = pyqtSignal(int, int)
 
 	instance_ = None
 	was_created_ = False
@@ -97,6 +99,8 @@ class Game(QObject):
 	def set_scene(self, scene):
 		self.current_scene_ = scene
 		self.unit_added_in_map.connect(self.current_scene_.add_unit_item)
+		self.move_unit.connect(self.current_scene_.move_unit_item)
+		self.remove_unit.connect(self.current_scene_.remove_unit_item)
 
 	def get_french_player(self):
 		return self.french_player_
@@ -124,6 +128,12 @@ class Game(QObject):
 				self.game_map_.add_unit(new_unit, x, y)
 				self.unit_added_in_map.emit(new_unit, x, y)
 				self.end_turn()
+		else:
+			self.move_unit.emit(x, y, x + 1, y + 1)  # to move
+			self.game_map_.move_unit(x, y, x + 1, y + 1)
+
+			# self.remove_unit.emit(x, y)  # to remove
+			# self.game_map_.remove_unit(x, y)
 
 	def end_turn(self):
 		if self.active_player_ is self.british_player_:
