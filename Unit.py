@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
+from UnitFraction import UnitFraction
 
 
 class Unit(ABC):
     def __init__(self):
         self.alive_ = True
+        self.fraction_ = None
 
     def attack(self, attacked_unit):
         if self.alive_:
@@ -29,6 +31,9 @@ class Unit(ABC):
         if self.alive_:
             self.hp_ = min(self.max_hp_, self.hp_ + self.heal_points_)
 
+    def get_fraction(self):
+        return self.fraction_
+
 
 class Swordsman(Unit, ABC):
     def __init__(self):
@@ -44,6 +49,7 @@ class FrenchSwordsman(Swordsman):
         super().__init__()
         self.max_hp_ = self.hp_ = 75
         self.damage_ = 25
+        self.fraction_ = UnitFraction.FRANCE
 
 
 class BritishSwordsman(Swordsman):
@@ -51,6 +57,7 @@ class BritishSwordsman(Swordsman):
         super().__init__()
         self.max_hp_ = self.hp_ = 75
         self.damage_ = 25
+        self.fraction_ = UnitFraction.BRITAIN
 
 
 class Cavalry(Unit):
@@ -67,6 +74,7 @@ class FrenchCavalry(Cavalry):
         super().__init__()
         self.max_hp_ = self.hp_ = 100
         self.damage_ = 35
+        self.fraction_ = UnitFraction.FRANCE
 
 
 class BritishCavalry(Cavalry):
@@ -74,6 +82,7 @@ class BritishCavalry(Cavalry):
         super().__init__()
         self.max_hp_ = self.hp_ = 90
         self.damage_ = 30
+        self.fraction_ = UnitFraction.BRITAIN
 
 
 class Archer(Unit):
@@ -90,6 +99,7 @@ class FrenchArcher(Archer):
         super().__init__()
         self.max_hp_ = self.hp_ = 50
         self.damage_ = 20
+        self.fraction_ = UnitFraction.FRANCE
 
 
 class BritishArcher(Archer):
@@ -97,6 +107,7 @@ class BritishArcher(Archer):
         super().__init__()
         self.max_hp_ = self.hp_ = 60
         self.damage_ = 30
+        self.fraction_ = UnitFraction.BRITAIN
 
 
 class UnitFactory(ABC):
