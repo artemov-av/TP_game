@@ -86,6 +86,7 @@ class Game(QObject):
 	unit_added_in_map = pyqtSignal(Unit, int, int)
 	game_phase_changed = pyqtSignal(GamePhase)
 
+
 	instance_ = None
 	was_created_ = False
 	was_inited_ = False

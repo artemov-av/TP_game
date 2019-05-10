@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QGraphicsScene
 from PyQt5.QtCore import pyqtSignal, QEvent
 
 from HexagonalTileItem import *
-from UnitItem import UnitItem
+from UnitItem import *
 from Game import Game
 
 
@@ -15,6 +15,7 @@ class GameScene(QGraphicsScene):
 		self.margin_x_ = 40
 		self.margin_y_ = 40
 		self.unit_size_ = 32
+		self.unit_matrix = {}
 
 	def add_map_tiles(self):
 		game_map = Game().get_game_map()		
@@ -35,11 +36,34 @@ class GameScene(QGraphicsScene):
 			self.tile_clicked.emit(object.x_, object.y_)
 		return True
 
+	def set_pos(self, unit_item, x, y):
+		translated_coords = self.translate_coords(x, y)
+		translated_coords.setX(translated_coords.x() - self.unit_size_ / 2)
+		translated_coords.setY(translated_coords.y() - self.unit_size_ / 2)
+		unit_item.setPos(translated_coords)
+
+		self.unit_matrix[(x, y)] = unit_item
+
 	def add_unit_item(self, unit, x, y):
 		y, x = x, y
-		unit_item = UnitItem(unit)
-		translated_coords = self.translate_coords(x, y)
-		translated_coords.setX(translated_coords.x() - self.unit_size_/2)
-		translated_coords.setY(translated_coords.y() - self.unit_size_/2)
-		unit_item.setPos(translated_coords)
+		unit_item = NewUnitItem(unit)
+
+		self.set_pos(unit_item, x, y)
 		self.addItem(unit_item)
+		self.update()
+
+	def remove_unit_item(self, x, y):
+		y, x = x, y
+		unit_item = self.unit_matrix[(x, y)]
+		self.removeItem(unit_item)
+		self.update()
+
+	def move_unit_item(self, unit_x, unit_y, x, y):
+		unit_y, unit_x = unit_x, unit_y
+		y, x = x, y
+
+		unit_item = self.unit_matrix[(unit_x, unit_y)]
+		self.unit_matrix.pop((unit_x, unit_y))
+
+		self.set_pos(unit_item, x, y)
+		self.update()

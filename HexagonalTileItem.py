@@ -31,7 +31,8 @@ class HexagonalTileItem(QGraphicsObject):
 		return path
 
 	def paint(self, painter, option, widget):
-		painter.fillPath(self.shape(), QBrush(QColor("green")))
+		color = QColor(51, 204, 51)
+		painter.fillPath(self.shape(), QBrush(QColor(color)))
 		painter.drawPath(self.shape())
 
 	def mousePressEvent(self, event):
