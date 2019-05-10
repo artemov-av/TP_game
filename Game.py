@@ -140,4 +140,4 @@ class Game(QObject):
 			self.active_player_ = self.french_player_
 		else:
 			self.active_player_ = self.british_player_
-		self.turn_changed.emit()
+			self.turn_changed.emit()

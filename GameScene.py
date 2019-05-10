@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QGraphicsScene
 from PyQt5.QtCore import pyqtSignal, QEvent
 
 from HexagonalTileItem import *
-from UnitItem import UnitItem
+from UnitItem import *
 from Game import Game
 
 
@@ -46,15 +46,17 @@ class GameScene(QGraphicsScene):
 
 	def add_unit_item(self, unit, x, y):
 		y, x = x, y
-		unit_item = UnitItem(unit)
+		unit_item = NewUnitItem(unit)
 
 		self.set_pos(unit_item, x, y)
 		self.addItem(unit_item)
+		self.update()
 
 	def remove_unit_item(self, x, y):
 		y, x = x, y
 		unit_item = self.unit_matrix[(x, y)]
 		self.removeItem(unit_item)
+		self.update()
 
 	def move_unit_item(self, unit_x, unit_y, x, y):
 		unit_y, unit_x = unit_x, unit_y
@@ -64,3 +66,4 @@ class GameScene(QGraphicsScene):
 		self.unit_matrix.pop((unit_x, unit_y))
 
 		self.set_pos(unit_item, x, y)
+		self.update()
