@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import QGraphicsScene
 from PyQt5.QtCore import pyqtSignal, QEvent
 
-
 from HexagonalTileItem import *
 from UnitItem import UnitItem
 from Game import Game

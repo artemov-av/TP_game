@@ -10,3 +10,6 @@ class UnitCreatingController:
 
 	def tile_clicked(self, x, y):
 		Game().add_unit_in_map(self.chosen_unit_type_, x, y)
+
+	def end_placement_button_clicked(self):
+		Game().end_placement()
