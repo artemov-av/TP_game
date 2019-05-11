@@ -145,7 +145,6 @@ class Game(QObject):
 					self.end_turn()
 
 	def end_turn(self):
-		print('kek')
 		if self.active_player_ is self.british_player_:
 			self.active_player_ = self.french_player_
 		else:
