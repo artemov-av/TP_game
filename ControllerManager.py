@@ -14,6 +14,7 @@ class ControllerManager:
 
 	def set_game_model(self, game_model):
 		self.game_model_ = game_model
+		self.game_model_.game_phase_changed.connect(self.change_controller)
 
 	def set_game_view(self, game_view):
 		self.game_view_ = game_view
@@ -39,11 +40,11 @@ class ControllerManager:
 
 		if type(self.controller_) == UnitCreatingController:
 			if self.game_view_ is not None:
-				self.game_view_.disconnect(self.controller_.changed_unit_type)
+				self.game_view_.unit_changed.disconnect(self.controller_.changed_unit_type)
 				self.game_view_.end_placement_clicked.disconnect(self.controller_.end_placement_button_clicked)
 
-			if self.game_scene is not None:
-				self.game_scene_.disconnect(self.controller_.tile_clicked)
+			if self.game_scene_ is not None:
+				self.game_scene_.tile_clicked.disconnect(self.controller_.tile_clicked)
 
 	def connect_game_and_view(self):
 		self.game_model_.unit_added_in_map.connect(self.game_view_.update_after_adding_unit)
@@ -56,7 +57,7 @@ class ControllerManager:
 		if type(self.controller_) == UnitCreatingController:			
 			self.game_view_.unit_changed.connect(self.controller_.changed_unit_type)
 			self.game_view_.end_placement_clicked.connect(self.controller_.end_placement_button_clicked)
-
 			self.game_scene_.tile_clicked.connect(self.controller_.tile_clicked)			
 		elif type(self.controller_) == BattleController:
-			pass
+			self.game_view_.end_turn_clicked.connect(self.controller_.end_turn_button_clicked)
+			self.game_scene_.tile_clicked.connect(self.controller_.tile_clicked)

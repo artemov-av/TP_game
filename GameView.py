@@ -80,3 +80,6 @@ class GameView(QObject):
 			else:
 				self.current_panel_ = self.french_panel_
 				self.main_widget_layout_.addWidget(self.current_panel_)
+
+			self.british_panel_.connect_end_turn_button(self.end_turn_clicked)
+			self.french_panel_.connect_end_turn_button(self.end_turn_clicked)
