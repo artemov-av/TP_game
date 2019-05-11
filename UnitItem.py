@@ -19,8 +19,13 @@ class UnitItem(QGraphicsPixmapItem):
 class NewUnitItem(UnitItem):
 	def __init__(self, unit):
 		super().__init__(unit)
+		self.rect = QRectF(0, -5, 32, 5)
 
 	def paint(self, painter, option, widget):
 		super().paint(painter, option, widget)
 		color = QColor(204, 0, 0)
-		painter.fillRect(QRectF(0, -5, 32, 5), QBrush(color))
+		painter.fillRect(self.rect, QBrush(color))
+
+	def update_health_bar(self, percentage):
+		self.rect = QRectF(0, -5, 32*percentage, 5)
+		self.update()

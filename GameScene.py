@@ -50,13 +50,13 @@ class GameScene(QGraphicsScene):
 
 		self.set_pos(unit_item, x, y)
 		self.addItem(unit_item)
-		self.update()
+		unit_item.update()
 
 	def remove_unit_item(self, x, y):
 		y, x = x, y
 		unit_item = self.unit_matrix[(x, y)]
 		self.removeItem(unit_item)
-		self.update()
+		unit_item.update()
 
 	def move_unit_item(self, unit_x, unit_y, x, y):
 		unit_y, unit_x = unit_x, unit_y
@@ -66,4 +66,4 @@ class GameScene(QGraphicsScene):
 		self.unit_matrix.pop((unit_x, unit_y))
 
 		self.set_pos(unit_item, x, y)
-		self.update()
+		unit_item.update()
