@@ -33,6 +33,12 @@ class Unit(ABC):
     def get_range(self):
         return self.range_
 
+    def get_hp(self):
+        return self.hp_
+
+    def get_max_hp(self):
+        return self.max_hp_
+
     def heal(self):
         if self.alive_:
             self.hp_ = min(self.max_hp_, self.hp_ + self.heal_points_)

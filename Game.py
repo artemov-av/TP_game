@@ -210,9 +210,11 @@ class Game(QObject):
 		if self.turn_units_state_.update_move_points(x1, y1, x2, y2):
 			self.game_map_.move_unit(x1, y1, x2, y2)
 			self.unit_moved.emit(x1, y1, x2, y2)
+			return True
+		return False
 
 	def attack_unit(self, x1, y1, x2, y2):
-		if self.turn_units_state_.update_attack(x1, y1):
+		if self.turn_units_state_.update_attack(x1, y1, x2, y2):
 			self.game_map_.get_unit(x1, y1).attack(self.game_map_.get_unit(x2, y2))
 			if not self.game_map_.get_unit(x2, y2).is_alive():
 				self.game_map_.remove_unit(x2, y2)
@@ -221,3 +223,5 @@ class Game(QObject):
 			else:
 				self.unit_updated.emit(x2, y2)
 			self.unit_updated.emit(x1, y1)
+			return True
+		return False

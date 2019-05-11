@@ -18,7 +18,7 @@ class RootClickState(ClickState):
 	def process_click(self):
 		x, y = self.clicked_tiles_list_[-1][0], self.clicked_tiles_list_[-1][1]
 		unit = Game().get_unit_by_coords(x, y)
-		if unit is not None and type(unit.get_fraction()) == type(Game().get_active_player().get_fraction()):
+		if unit is not None and unit.get_fraction() == Game().get_active_player().get_fraction():
 			self.context_.change_click_state(FriendUnitClickState(self.context_, self.clicked_tiles_list_))
 		else:
 			self.context_.change_click_state(RootClickState(self.context_, self.clicked_tiles_list_))
@@ -38,7 +38,7 @@ class FriendUnitClickState(ClickState):
 				self.context_.change_click_state(RootClickState(self.context_, self.clicked_tiles_list_))
 			else:
 				del self.clicked_tiles_list_[-1]
-		elif type(unit.get_fraction()) == type(Game().get_active_player().get_fraction()):
+		elif unit.get_fraction() == Game().get_active_player().get_fraction():
 			self.context_.change_click_state(FriendUnitClickState(self.context_, self.clicked_tiles_list_))
 		else:
 			if Game().attack_unit(x2, y2, x1, y1):
@@ -62,6 +62,7 @@ class BattleController:
 
 	def tile_clicked(self, x, y):
 		self.clicked_tiles_list_.append((x, y))
+		# print(type(self.click_state_))
 		self.click_state_.process_click()
 
 	def end_turn_button_clicked(self):
