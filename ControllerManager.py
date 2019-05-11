@@ -5,7 +5,7 @@ from BattleController import BattleController
 
 class ControllerManager:
 	def __init__(self):
-		self.game_model_ =  None
+		self.game_model_ = None
 		self.game_view_ = None
 		self.game_scene_ = None
 		self.placement_controller_ = UnitCreatingController()

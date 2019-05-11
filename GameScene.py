@@ -15,7 +15,7 @@ class GameScene(QGraphicsScene):
 		self.margin_x_ = 40
 		self.margin_y_ = 40
 		self.unit_size_ = 32
-		self.unit_matrix = {}
+		self.unit_matrix_ = {}
 
 	def add_map_tiles(self):
 		game_map = Game().get_game_map()		
@@ -42,11 +42,11 @@ class GameScene(QGraphicsScene):
 		translated_coords.setY(translated_coords.y() - self.unit_size_ / 2)
 		unit_item.setPos(translated_coords)
 
-		self.unit_matrix[(x, y)] = unit_item
+		self.unit_matrix_[(x, y)] = unit_item
 
 	def add_unit_item(self, unit, x, y):
 		y, x = x, y
-		unit_item = NewUnitItem(unit)
+		unit_item = UnitWithHpBar(unit)
 
 		self.set_pos(unit_item, x, y)
 		self.addItem(unit_item)
@@ -54,7 +54,7 @@ class GameScene(QGraphicsScene):
 
 	def remove_unit_item(self, x, y):
 		y, x = x, y
-		unit_item = self.unit_matrix[(x, y)]
+		unit_item = self.unit_matrix_[(x, y)]
 		self.removeItem(unit_item)
 		unit_item.update()
 
@@ -62,8 +62,8 @@ class GameScene(QGraphicsScene):
 		unit_y, unit_x = unit_x, unit_y
 		y, x = x, y
 
-		unit_item = self.unit_matrix[(unit_x, unit_y)]
-		self.unit_matrix.pop((unit_x, unit_y))
+		unit_item = self.unit_matrix_[(unit_x, unit_y)]
+		self.unit_matrix_.pop((unit_x, unit_y))
 
 		self.set_pos(unit_item, x, y)
 		unit_item.update()

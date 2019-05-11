@@ -60,7 +60,7 @@ class GameView(QObject):
 			self.current_panel_ = self.french_panel_
 			self.main_widget_layout_.addWidget(self.current_panel_)
 		else:
-			self.current_panel_= self.british_panel_
+			self.current_panel_ = self.british_panel_
 			self.main_widget_layout_.insertWidget(0, self.current_panel_)
 		self.current_panel_.show()
 

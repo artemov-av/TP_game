@@ -9,23 +9,19 @@ class UnitItem(QGraphicsPixmapItem):
 	def __init__(self, unit):
 		super().__init__()
 		self.unit_ = unit
-		self.pixmap = QPixmap(UnitImageMapper.get_path_to_image(unit))
-		self.setPixmap(self.pixmap)
+		self.pixmap_ = QPixmap(UnitImageMapper.get_path_to_image(unit))
+		self.setPixmap(self.pixmap_)
 
 	def get_unit(self):
 		return self.unit
 
 
-class NewUnitItem(UnitItem):
+class UnitWithHpBar(UnitItem):
 	def __init__(self, unit):
 		super().__init__(unit)
-		self.rect = QRectF(0, -5, 32, 5)
 
 	def paint(self, painter, option, widget):
 		super().paint(painter, option, widget)
-		color = QColor(204, 0, 0)
-		painter.fillRect(self.rect, QBrush(color))
-
-	def update_health_bar(self, percentage):
-		self.rect = QRectF(0, -5, 32*percentage, 5)
-		self.update()
+		bar_color = QColor(204, 0, 0)
+		hp_bar = QRectF(0, -5, 32 * (self.unit_.hp_ / self.unit_.max_hp_), 5)
+		painter.fillRect(hp_bar, QBrush(bar_color))
