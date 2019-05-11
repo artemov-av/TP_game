@@ -13,6 +13,9 @@ class GameMap:
 	def add_unit(self, unit, x, y):
 		self.unit_map_[x][y] = unit
 
+	def remove_unit(self, x, y):
+		self.unit_map_[x][y] = None
+
 	def get_unit(self, x, y):
 		return self.unit_map_[x][y]
 
@@ -42,42 +45,49 @@ class GameMap:
 
 	def adjacent_tiles(self, x, y):
 		adj = []
-		if is_there_tile(x-1, y):
+		if self.is_there_tile(x-1, y):
 			adj.append((x-1, y))
-		if is_there_tile(x-1, y-1):
-			adj.append((x-1, y-1))
-		if is_there_tile(x-1, y+1):
-			adj.append((x-1, y+1))
-		if is_there_tile(x, y-1):
+		if self.is_there_tile(x, y-1):
 			adj.append((x, y-1))
-		if is_there_tile(x, y+1):
+		if self.is_there_tile(x, y+1):
 			adj.append((x, y+1))
-		if is_there_tile(x+1, y):
+		if self.is_there_tile(x+1, y):
 			adj.append((x+1, y))
+
+		if x%2==0:
+			t = y+1
+		else:
+			t = y-1
+
+		if self.is_there_tile(x+1, t):
+			adj.append((x+1, t))
+		if self.is_there_tile(x-1, t):
+			adj.append((x-1, t))
 
 		return adj
 
 	def get_walking_path(self, x1, y1, x2, y2):
 		return self.find_path(x1, y1, x2, y2, check_on_passability=True)
 
-	def get_shooting_distance(self, x1, y1, x2, y2):
+	def get_attacking_distance(self, x1, y1, x2, y2):
 		path = self.find_path(x1, y1, x2, y2)
-		return len(path) if path is not None else None
+		return len(path) - 1 if path is not None else None
 
-	def find_path(self, x1, y1, x2, y2, check_on_passability = False):
+	def find_path(self, x1, y1, x2, y2, check_on_passability=False):
 		path = []
 		parent = [[None for x in range(self.get_width())] for x in range(self.get_height())]
 		bfs_q = deque()
-		deque.append((x1, y1))
+		bfs_q.append((x1, y1))
 
-		while len(deque) > 0:
+		while len(bfs_q) > 0:
 			cur_tile = bfs_q.popleft()
 			if cur_tile == (x2, y2):
 				while not cur_tile == (x1, y1):
 					path.append(cur_tile)
-					cur_tile = parent[x2][y2]
-				path.append[cur_tile]
-				return reversed(path)
+					cur_tile = parent[cur_tile[0]][cur_tile[1]]
+				path.append(cur_tile)
+				path.reverse()
+				return path
 
 			adj = self.adjacent_tiles(cur_tile[0], cur_tile[1])
 			for tile in adj:

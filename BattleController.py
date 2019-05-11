@@ -36,11 +36,15 @@ class FriendUnitClickState(ClickState):
 		if unit is None:
 			if Game().move_unit(x2, y2, x1, y1):
 				self.context_.change_click_state(RootClickState(self.context_, self.clicked_tiles_list_))
+			else:
+				del self.clicked_tiles_list_[-1]
 		elif type(unit.get_fraction()) == type(Game().get_active_player().get_fraction()):
 			self.context_.change_click_state(FriendUnitClickState(self.context_, self.clicked_tiles_list_))
 		else:
 			if Game().attack_unit(x2, y2, x1, y1):
 				self.context_.change_click_state(RootClickState(self.context_, self.clicked_tiles_list_))
+			else:
+				del self.clicked_tiles_list_[-1]
 
 
 class BattleController:

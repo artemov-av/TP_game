@@ -15,7 +15,6 @@ class UnitType(Enum):
 class Player(ABC):
 	def __init__(self):
 		self.money_ = 1000
-		self.army_ = []
 		self.fraction_ = None
 
 	def get_money(self):
@@ -26,7 +25,6 @@ class Player(ABC):
 		if unit.get_price() > self.money_:
 			return None
 		if unit is not None:
-			self.army_.append(unit)
 			self.money_ -= unit.get_price()
 
 		return unit
@@ -36,7 +34,6 @@ class Player(ABC):
 		if unit.get_price() > self.money_:
 			return None
 		if unit is not None:
-			self.army_.append(unit)
 			self.money_ -= unit.get_price()
 
 		return unit
@@ -46,7 +43,6 @@ class Player(ABC):
 		if unit.get_price() > self.money_:
 			return None
 		if unit is not None:
-			self.army_.append(unit)
 			self.money_ -= unit.get_price()
 
 		return unit
@@ -81,11 +77,52 @@ class GamePhase(Enum):
 	END_GAME = 3
 
 
+class TurnUnitsState:
+	def __init__(self, game_map):
+		self.game_map_ = game_map
+		self.attacked_ = [[None for x in range(game_map.get_width())] for x in range(game_map.get_height())]
+		self.move_points_spent_ = [[None for x in range(game_map.get_width())] for x in range(game_map.get_height())]
+		self.refresh()
+
+	def refresh(self):
+		for x in range(self.game_map_.get_height()):
+			for y in range(self.game_map_.get_width()):
+				unit = self.game_map_.get_unit(x, y)
+				if unit is not None:
+					self.attacked_[x][y] = False
+					self.move_points_spent_[x][y] = 0
+
+	def update_attack(self, x1, y1, x2, y2):
+		if not self.attacked_[x1][y1]:
+			distance = self.game_map_.get_attacking_distance(x1, y1, x2, y2)
+			if distance <= self.game_map_.get_unit(x1, y1).get_range():
+				self.attacked_[x1][y1] = True
+				return True
+		return False
+
+	def update_move_points(self, x1, y1, x2, y2):
+		path = self.game_map_.get_walking_path(x1, y1, x2, y2)
+		if path is None:
+			return False
+		distance = len(path) - 1
+		if self.move_points_spent_[x1][y1] + distance <= self.game_map_.get_unit(x1, y1).get_move_points():
+			self.attacked_[x1][y1], self.attacked_[x2][y2] = self.attacked_[x2][y2], self.attacked_[x1][y1]
+			self.move_points_spent_[x1][y1], self.move_points_spent_[x2][y2] = self.move_points_spent_[x2][y2], self.move_points_spent_[x1][y1]
+			self.move_points_spent_[x2][y2] += distance
+			return True
+		return False
+
+	def remove_unit(self, x, y):
+		self.attacked_[x][y] = self.move_points_spent_[x][y] = None
+
+
 class Game(QObject):
 	turn_changed = pyqtSignal()
 	unit_added_in_map = pyqtSignal(Unit, int, int)
 	game_phase_changed = pyqtSignal(GamePhase)
-
+	unit_died = pyqtSignal(int, int)
+	unit_moved = pyqtSignal(int, int, int, int)
+	unit_updated = pyqtSignal(int, int)
 
 	instance_ = None
 	was_created_ = False
@@ -100,8 +137,9 @@ class Game(QObject):
 			self.french_player_ = FrenchPlayer()
 			self.british_player_ = BritishPlayer()
 			self.active_player_ = self.british_player_
-			self.game_map_ = GameMap(10, 5)
-			self.current_scene_ = None
+			self.game_map_width_ = 10
+			self.game_map_height_ = 5
+			self.game_map_ = GameMap(self.game_map_width_, self.game_map_height_)
 			self.instance_ = self
 
 	def __new__(cls):
@@ -149,6 +187,8 @@ class Game(QObject):
 			self.active_player_ = self.french_player_
 		else:
 			self.active_player_ = self.british_player_
+		if self.game_phase_ == GamePhase.BATTLE:
+			self.turn_units_state_.refresh()
 		self.turn_changed.emit()
 
 	def end_placement(self):
@@ -160,7 +200,24 @@ class Game(QObject):
 		else:
 			self.game_phase_ = GamePhase.BATTLE
 			self.placement_ended_ = None
+			self.turn_units_state_ = TurnUnitsState(self.game_map_)
 			self.game_phase_changed.emit(self.game_phase_)
 
 	def get_unit_by_coords(self, x, y):
 		return self.game_map_.get_unit(x, y)
+
+	def move_unit(self, x1, y1, x2, y2):
+		if self.turn_units_state_.update_move_points(x1, y1, x2, y2):
+			self.game_map_.move_unit(x1, y1, x2, y2)
+			self.unit_moved.emit(x1, y1, x2, y2)
+
+	def attack_unit(self, x1, y1, x2, y2):
+		if self.turn_units_state_.update_attack(x1, y1):
+			self.game_map_.get_unit(x1, y1).attack(self.game_map_.get_unit(x2, y2))
+			if not self.game_map_.get_unit(x2, y2).is_alive():
+				self.game_map_.remove_unit(x2, y2)
+				self.turn_units_state_.remove_unit(x2, y2)
+				self.unit_died.emit(x2, y2)
+			else:
+				self.unit_updated.emit(x2, y2)
+			self.unit_updated.emit(x1, y1)

@@ -48,10 +48,13 @@ class ControllerManager:
 
 	def connect_game_and_view(self):
 		self.game_model_.unit_added_in_map.connect(self.game_view_.update_after_adding_unit)
-		self.game_model_.unit_added_in_map.connect(self.game_scene_.add_unit_item)
-
 		self.game_model_.turn_changed.connect(self.game_view_.update_after_turn_change)
 		self.game_model_.game_phase_changed.connect(self.game_view_.change_phase)
+
+		self.game_model_.unit_added_in_map.connect(self.game_scene_.add_unit_item)
+		self.game_model_.unit_died.connect(self.game_scene_.remove_unit_item)
+		self.game_model_.unit_updated.connect(self.game_scene_.update_unit_item)
+		self.game_model_.unit_moved.connect(self.game_scene_.move_unit_item)
 
 	def connect_controller(self):
 		if type(self.controller_) == UnitCreatingController:			

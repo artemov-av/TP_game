@@ -67,3 +67,6 @@ class GameScene(QGraphicsScene):
 
 		self.set_pos(unit_item, x, y)
 		unit_item.update()
+
+	def update_unit_item(self, x, y):
+		self.unit_matrix_[(x, y)].update()

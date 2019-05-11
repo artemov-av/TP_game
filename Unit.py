@@ -27,6 +27,12 @@ class Unit(ABC):
     def get_price(self):
         return self.price_
 
+    def get_move_points(self):
+        return self.move_points_
+
+    def get_range(self):
+        return self.range_
+
     def heal(self):
         if self.alive_:
             self.hp_ = min(self.max_hp_, self.hp_ + self.heal_points_)
