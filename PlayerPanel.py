@@ -44,6 +44,7 @@ class UnitCreatingPanel(PlayerPanel):
 
 	def update_after_adding_unit(self):
 		self.money_lbl_.setText(str(self.player_.get_money()) + " gold")
+		self.swordsman_radio_.setChecked(True)
 
 	def connect_radios(self, signal):
 		signal.emit(UnitType.SWORDSMAN)
