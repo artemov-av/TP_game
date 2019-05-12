@@ -1,4 +1,4 @@
-from Game import Game, GamePhase
+from Game import GamePhase
 from UnitCreatingController import UnitCreatingController
 from BattleController import BattleController
 
@@ -55,6 +55,8 @@ class ControllerManager:
 		self.game_model_.unit_died.connect(self.game_scene_.remove_unit_item)
 		self.game_model_.unit_updated.connect(self.game_scene_.update_unit_item)
 		self.game_model_.unit_moved.connect(self.game_scene_.move_unit_item)
+		self.game_model_.unit_clicked.connect(self.game_scene_.update_unit)
+		self.game_model_.unit_unclicked.connect(self.game_scene_.update_last_unit)
 
 	def connect_controller(self):
 		if type(self.controller_) == UnitCreatingController:			

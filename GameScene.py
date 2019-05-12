@@ -16,6 +16,7 @@ class GameScene(QGraphicsScene):
 		self.margin_y_ = 40
 		self.unit_size_ = 32
 		self.unit_matrix_ = {}
+		self.last_clicked_tile = None
 
 	def add_map_tiles(self):
 		game_map = Game().get_game_map()		
@@ -55,6 +56,7 @@ class GameScene(QGraphicsScene):
 	def remove_unit_item(self, x, y):
 		y, x = x, y
 		unit_item = self.unit_matrix_[(x, y)]
+		self.unit_matrix_.pop((x, y))
 		self.removeItem(unit_item)
 		unit_item.update()
 
@@ -71,3 +73,18 @@ class GameScene(QGraphicsScene):
 	def update_unit_item(self, x, y):
 		y, x = x, y
 		self.unit_matrix_[(x, y)].update()
+
+	def update_unit(self, x, y):
+		y, x = x, y
+		self.update_last_unit()
+
+		unit_item = self.unit_matrix_[(x, y)]
+		unit_item.clicked_ = True
+		unit_item.update()
+
+		self.last_clicked_tile = unit_item
+
+	def update_last_unit(self):
+		if self.last_clicked_tile is not None:
+			self.last_clicked_tile.clicked_ = False
+			self.last_clicked_tile.update()

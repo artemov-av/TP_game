@@ -13,9 +13,6 @@ class GameMap:
 	def add_unit(self, unit, x, y):
 		self.unit_map_[x][y] = unit
 
-	def remove_unit(self, x, y):
-		self.unit_map_[x][y] = None
-
 	def get_unit(self, x, y):
 		return self.unit_map_[x][y]
 

@@ -123,6 +123,8 @@ class Game(QObject):
 	unit_died = pyqtSignal(int, int)
 	unit_moved = pyqtSignal(int, int, int, int)
 	unit_updated = pyqtSignal(int, int)
+	unit_clicked = pyqtSignal(int, int)
+	unit_unclicked = pyqtSignal()
 
 	instance_ = None
 	was_created_ = False
@@ -225,3 +227,10 @@ class Game(QObject):
 			self.unit_updated.emit(x1, y1)
 			return True
 		return False
+
+	def click_unit(self, x, y):
+		if self.game_map_.get_unit(x, y) is not None:
+			self.unit_clicked.emit(x, y)
+
+	def unclick_units(self):
+		self.unit_unclicked.emit()

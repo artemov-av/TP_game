@@ -16,3 +16,12 @@ class UnitImageMapper:
 			return "img/british_horseman.png"
 		if isinstance(unit, FrenchCavalry):
 			return "img/french_horseman.png"
+
+	@staticmethod
+	def get_path_to_stroke_image(unit):
+		if isinstance(unit, Swordsman):
+			return "img/swordsman_stroke.png"
+		if isinstance(unit, Archer):
+			return "img/archer_stroke.png"
+		if isinstance(unit, Cavalry):
+			return "img/horseman_stroke.png"

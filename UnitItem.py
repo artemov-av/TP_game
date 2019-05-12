@@ -23,15 +23,25 @@ class UnitWithHpBar(UnitItem):
 		self.hp_bar_width_ = 5
 		self.hp_bar_offset_ = 2
 		self.hp_bar_color_ = QColor(204, 0, 0)
-
+		self.clicked_ = False
 
 	def boundingRect(self):
 		old_rect = super().boundingRect()
 		y_delta = self.hp_bar_width_ + self.hp_bar_offset_
 		return QRectF(old_rect.x(), old_rect.y() - y_delta, old_rect.width(), old_rect.height() + y_delta)
 
-
 	def paint(self, painter, option, widget):
+
 		super().paint(painter, option, widget)
+
 		hp_bar = QRectF(0, -self.hp_bar_width_-self.hp_bar_offset_, self.hp_bar_length_*(self.unit_.get_hp()/self.unit_.get_max_hp()), self.hp_bar_width_)
 		painter.fillRect(hp_bar, QBrush(self.hp_bar_color_))
+
+		if self.clicked_:
+			self.paint_stroke(painter)
+
+	def paint_stroke(self, painter):
+		offset_x = 0
+		offset_y = 0
+		stroke = QPixmap(UnitImageMapper.get_path_to_stroke_image(self.unit_))
+		painter.drawPixmap(offset_x, offset_y, stroke)

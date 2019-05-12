@@ -11,6 +11,7 @@ class HexagonalTileItem(QGraphicsObject):
 		self.radius_ = radius
 		self.x_ = x
 		self.y_ = y
+		self.pressed_ = False
 
 	def get_coords(self):
 		return self.x_, self.y_
@@ -32,7 +33,11 @@ class HexagonalTileItem(QGraphicsObject):
 
 	def paint(self, painter, option, widget):
 		color = QColor(51, 204, 51)
-		painter.fillPath(self.shape(), QBrush(QColor(color)))
+		if self.pressed_:
+			print('pressed')
+			painter.fillPath(self.shape(), QBrush(QColor('green')))
+		else:
+			painter.fillPath(self.shape(), QBrush(QColor(color)))
 		painter.drawPath(self.shape())
 
 	def mousePressEvent(self, event):

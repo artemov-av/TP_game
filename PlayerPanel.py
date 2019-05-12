@@ -1,6 +1,4 @@
-from abc import ABC
 from PyQt5.QtWidgets import QLabel, QGroupBox, QRadioButton, QPushButton, QVBoxLayout, QWidget
-from PyQt5.QtCore import QObject
 from Game import UnitType
 
 
