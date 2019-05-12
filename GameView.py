@@ -65,6 +65,9 @@ class GameView(QObject):
 		self.current_panel_.show()
 
 	def change_phase(self, game_phase):
+		if game_phase == GamePhase.END_GAME:
+			self.game_over(Game().get_rival())
+
 		if game_phase == GamePhase.BATTLE:
 			self.main_widget_layout_.removeWidget(self.british_panel_)
 			self.british_panel_.hide()
@@ -83,3 +86,8 @@ class GameView(QObject):
 
 			self.british_panel_.connect_end_turn_button(self.end_turn_clicked)
 			self.french_panel_.connect_end_turn_button(self.end_turn_clicked)
+
+	def game_over(self, player):
+		self.current_panel_.hide()
+		game_over_label = QLabel(str(player) + ' lost')
+		self.main_widget_layout_.addWidget(game_over_label)

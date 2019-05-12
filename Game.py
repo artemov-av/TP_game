@@ -16,6 +16,7 @@ class Player(ABC):
 	def __init__(self):
 		self.money_ = 1000
 		self.fraction_ = None
+		self.army_size_ = 0
 
 	def get_money(self):
 		return self.money_
@@ -50,6 +51,14 @@ class Player(ABC):
 	def get_fraction(self):
 		return self.fraction_
 
+	def get_army_size(self):
+		return self.army_size_
+
+	def increase_army(self):
+		self.army_size_ += 1
+
+	def decrease_army(self):
+		self.army_size_ -= 1
 
 class FrenchPlayer(Player):
 	def __init__(self):
@@ -179,6 +188,7 @@ class Game(QObject):
 				new_unit = self.active_player_.add_cavalry()
 
 			if new_unit is not None:
+				self.active_player_.increase_army()
 				self.game_map_.add_unit(new_unit, x, y)
 				self.unit_added_in_map.emit(new_unit, x, y)
 				if not self.placement_ended_:
@@ -222,9 +232,12 @@ class Game(QObject):
 				self.game_map_.remove_unit(x2, y2)
 				self.turn_units_state_.remove_unit(x2, y2)
 				self.unit_died.emit(x2, y2)
+
+				rival = self.get_rival()
+				rival.decrease_army()
+				self.check_end_game()
 			else:
 				self.unit_updated.emit(x2, y2)
-			self.unit_updated.emit(x1, y1)
 			return True
 		return False
 
@@ -234,3 +247,15 @@ class Game(QObject):
 
 	def unclick_units(self):
 		self.unit_unclicked.emit()
+
+	def get_rival(self):
+		if self.get_active_player() == self.get_french_player():
+			return self.british_player_
+		else:
+			return self.french_player_
+
+	def check_end_game(self):
+		rival = self.get_rival()
+		if rival.get_army_size() == 0:
+			self.game_phase_ = GamePhase.END_GAME
+			self.game_phase_changed.emit(self.game_phase_)
