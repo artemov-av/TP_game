@@ -51,10 +51,7 @@ class GameMap:
 		if self.is_there_tile(x+1, y):
 			adj.append((x+1, y))
 
-		if x%2==0:
-			t = y+1
-		else:
-			t = y-1
+		t = y + 1 if x % 2 == 0 else y - 1
 
 		if self.is_there_tile(x+1, t):
 			adj.append((x+1, t))

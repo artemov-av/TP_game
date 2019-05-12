@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, QGraphicsView
+from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QGraphicsView
 from PyQt5.QtCore import pyqtSignal, QObject
 
-from Game import Game, UnitType, FrenchPlayer, BritishPlayer, GamePhase
+from Game import Game, BritishPlayer, GamePhase
 from GameScene import GameScene
 from PlayerPanel import *
 
@@ -31,7 +31,7 @@ class GameView(QObject):
 
 	def init_window(self):
 		self.game_window_.setCentralWidget(self.main_widget_)
-		self.game_window_.setWindowTitle('Medieval game v0.1.0')
+		self.game_window_.setWindowTitle('Medieval game v1.0.0')
 		self.game_window_.show()
 
 	def init_main_widget(self):
